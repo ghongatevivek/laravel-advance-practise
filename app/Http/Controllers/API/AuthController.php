@@ -40,21 +40,16 @@ class AuthController extends Controller
 
     public function login(Request $request): JsonResponse
     {
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
-            $user = Auth::user(); 
-            $success['token'] =  $user->createToken('MyApp')->accessToken; 
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $user = Auth::user();
+            $success['token'] =  $user->createToken('MyApp')->accessToken;
             $success['name'] =  $user->name;
-   return response()->json([
-    'success' => true,
-    'data' => [
-        'token' => $success['token'], // Include the actual token here
-        'name' => $success['name']
-    ],
-    'message' => 'dd'
-]);
-        } 
-        else{ 
-            return $this->sendError('Unauthorized.', ['error'=>'Unauthorized']);
-        } 
+            return $this->sendResponse($success, 'User login successfully.');
+        } else {
+            return $this->sendError('Unauthorized.', ['error' => 'Unauthorized']);
+        }
+    }
+
+    public function test() {
     }
 }
