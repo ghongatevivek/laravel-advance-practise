@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ItemCreateUpdate;
+use App\Http\Resources\ItemResource;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use App\Traits\CommonTrait;
@@ -15,13 +18,13 @@ class ItemController extends Controller
     public function index()
     {
         $getItemsData = Item::all();
-        return $this->sendResponse($getItemsData,'Item Fetch successfully.');
+        return $this->sendResponse(ItemResource::collection($getItemsData),'Item Fetch successfully.');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create( $request)
     {
         //
     }
@@ -29,9 +32,12 @@ class ItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ItemCreateUpdate $request)
     {
-        //
+        $input = $request->validated();
+        $saveItem = Item::create($input);
+        return $this->sendResponse(new ItemResource($saveItem),'Item Saved successfully.');
+
     }
 
     /**
