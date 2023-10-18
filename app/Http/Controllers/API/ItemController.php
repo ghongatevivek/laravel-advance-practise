@@ -45,7 +45,8 @@ class ItemController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $getItemsDetails = Item::where('id',$id)->first();
+        return $this->sendResponse(new ItemResource($getItemsDetails),'Item Fetch successfully.');
     }
 
     /**
@@ -59,9 +60,15 @@ class ItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ItemCreateUpdate $request, string $id)
     {
-        //
+        $getItemDetails = Item::where('id',$id)->first();
+        if($getItemDetails == null){
+            return $this->sendError('Item not found');
+        }
+        $input = $request->validated();
+        $getItemDetails->update($input);
+        return $this->sendResponse(new ItemResource($getItemDetails),'Item updated successfully.');
     }
 
     /**
@@ -69,6 +76,11 @@ class ItemController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $getItemDetails = Item::where('id',$id)->first();
+        if($getItemDetails == null){
+            return $this->sendError('Item not found');
+        }
+        $getItemDetails->delete();
+        return $this->sendResponse([],'Item deleted successfully.');
     }
 }

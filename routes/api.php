@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:api')->group( function () {
-    Route::resource('item',ItemController::class);
+    Route::apiResource('item',ItemController::class);
 });
 
 Route::post('signup',[AuthController::class,'register']);
